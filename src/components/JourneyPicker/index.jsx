@@ -30,7 +30,7 @@ useEffect(() => {
   const fetchCities = async () => {
     const resp = await fetch("https://apps.kodim.cz/daweb/leviexpress/api/cities");
     if (!resp.ok) { 
-      alert("Chyba při načítání dat");
+      alert("Chyba při načítání dat.");
       return;
     }
     const data = await resp.json();
@@ -40,7 +40,7 @@ useEffect(() => {
   const fetchDates = async () => {
     const resp = await fetch("https://apps.kodim.cz/daweb/leviexpress/api/dates");
     if (!resp.ok) {
-      alert("Chyba při načítání dat");
+      alert("Chyba při načítání dat.");
       return;
     }
     const data = await resp.json();
@@ -50,11 +50,20 @@ useEffect(() => {
   fetchDates();
 }, []);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const journey = { fromCity, toCity, date };
-    console.log(`Uživatel chce objednat jízdenku z ${fromCity} do ${toCity} na ${date}.`);
-  };
+      const apiUrl = `https://apps.kodim.cz/daweb/leviexpress/api/journey?fromCity=${fromCity}&toCity=${toCity}&date=${date}`;
+
+  const response = await fetch(apiUrl);
+    if (!response.ok) {
+    alert('Došlo k chybě při vyhledávání spojení.');
+    return;
+  }
+  const data = await response.json();
+  if (onJourneyChange) {
+    onJourneyChange(data.results);
+  }
+};
 
   return (
     <div className="journey-picker container">
@@ -83,7 +92,8 @@ useEffect(() => {
             </select>
           </label>
           <div className="journey-picker__controls">
-            <button className="btn" type="submit">
+            <button className="btn" type="submit"
+              disabled={!fromCity || !toCity || !date}>
               Vyhledat spoj
             </button>
           </div>
