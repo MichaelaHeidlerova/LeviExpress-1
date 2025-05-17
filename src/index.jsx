@@ -4,14 +4,14 @@ import { createBrowserRouter, RouterProvider, Link } from 'react-router-dom';
 import { App } from './components/App';
 import './global.css';
 import { HomePage } from './pages/HomePage';
-import { ReservationPage } from './components/ReservationPage/ReservationPage';
+import { ReservationPage } from './pages/HomePage/ReservationPage/ReservationPage';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
     children: [
-      { path: '/',
+      { path: "",
         element: <HomePage />,
       },
       { path: '/reservation',
